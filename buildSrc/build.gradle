@@ -1,0 +1,34 @@
+//apply plugin: 'java-library'
+//apply plugin: 'groovy'
+//plugins {
+//    id 'com.android.library' version '7.3.0' apply false
+//    id 'org.jetbrains.kotlin.android' version '1.7.10' apply false
+//}
+plugins {
+    id 'java-library'
+    id 'groovy'
+}
+repositories {
+    google()
+    jcenter()
+}
+
+dependencies {
+    implementation gradleApi()//gradle sdk
+    implementation localGroovy()//groovy sdk
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDir 'src/main/groovy'
+        }
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
+}
