@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity
 abstract class BaseActivity : AppCompatActivity() {
 
     var mContext: Context? = null
-    var TAG=BaseActivity::class.java.simpleName
+//    var TAG=BaseActivity::class.java.simpleName
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = this
