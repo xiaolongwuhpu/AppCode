@@ -27,4 +27,15 @@
         android:layout_height="wrap_content"
         android:text="permission"/>
 
+    <Button
+        android:id="@+id/btn_home_press"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="home_press"/>
+    <Button
+        android:id="@+id/btn_acc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="acc"/>
+
 </android.support.v7.widget.LinearLayoutCompat>

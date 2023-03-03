@@ -17,6 +17,7 @@ import android.widget.Button
 import android.widget.Toast
 import com.longwu.appcode.R
 import com.longwu.appcode.base.BaseActivity
+import com.longwu.appcode.util.PermissionRomUtil
 
 
 class PermissionActivity : BaseActivity() {
@@ -67,12 +68,14 @@ class PermissionActivity : BaseActivity() {
                         builder.setTitle("权限申请")
                             .setMessage("点击允许才可以使用我们的app哦")
                             .setPositiveButton("去允许") { mDialog, id ->
-                                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                val uri = Uri.fromParts("package",
-                                    packageName,
-                                    null) //注意就是"package",不用改成自己的包名
-                                intent.data = uri
-                                startActivityForResult(intent, 2)
+
+                                 PermissionRomUtil.jumpPermissionPage(this)
+//                                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+//                                val uri = Uri.fromParts("package",
+//                                    packageName,
+//                                    null) //注意就是"package",不用改成自己的包名
+//                                intent.data = uri
+//                                startActivityForResult(intent, 2)
                             }
                         dialog = builder.show()
                         break
