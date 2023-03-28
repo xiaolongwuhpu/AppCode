@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android-extensions'
 }
 android {
     namespace 'com.longwu.appcode'
@@ -38,4 +39,6 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+//    implementation 'com.google.flatbuffers:flatbuffers-java:2.0.0'
+    implementation 'com.google.flatbuffers:flatbuffers-java:23.3.3'
 }

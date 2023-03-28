@@ -1,0 +1,10 @@
+table KeyVaules {
+  package_name: string;
+  category_id: string;
+}
+
+table TestMap {
+  app_categories: [KeyVaules];
+}
+
+root_type TestMap;
