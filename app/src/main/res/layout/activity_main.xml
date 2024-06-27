@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,36 +18,75 @@
         android:id="@+id/btn_launcher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="launcher" />
+        android:text="launcher"
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/btn_permission"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="permission" />
+        android:text="permission"
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/btn_home_press"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="home_press" />
+        android:text="home_press"
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/btn_acc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="acc" />
+        android:text="acc"
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/btn_speech"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="speech_to_text" />
+        android:text="speech_to_text"
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/btn_flatbuffers_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="flatbuffers_map" />
+        android:text="flatbuffers_map"
+        android:visibility="visible" />
 
-</android.support.v7.widget.LinearLayoutCompat>
+    <Button
+        android:id="@+id/btn_window_mananger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="虚拟屏"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/btn_custom_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="customview"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="location"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/shortcut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="media notif" />
+
+    <Button
+        android:id="@+id/liveWallpaper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="liveWallpaper" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

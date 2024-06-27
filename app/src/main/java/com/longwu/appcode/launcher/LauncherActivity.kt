@@ -3,7 +3,7 @@ package com.longwu.appcode.launcher
 import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.longwu.appcode.R
 
 class LauncherActivity : AppCompatActivity() {

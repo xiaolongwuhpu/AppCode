@@ -1,11 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="${applicationId}">
 
+    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
+    <uses-permission android:name="android.permission.ACTIVITY_EMBEDDING" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission
+        android:name="android.permission.READ_CLIPBOARD_IN_BACKGROUND"
+        android:protectionLevel="signature|role" />
+    <uses-permission
+        android:name="android.permission.android.permission.SET_CLIP_SOURCE"
+        android:protectionLevel="signature" />
+    <uses-permission
+        android:name="android.permission.SUPPRESS_CLIPBOARD_ACCESS_NOTIFICATION"
+        android:protectionLevel="signature|role" />
+    <uses-permission android:name="android.permission.BIND_JOB_SERVICE" />
 
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.BIND_WALLPAPER" />
+<!--    android:sharedUserMaxSdkVersion="32"-->
+<!--    android:sharedUserId="android.uid.system"-->
     <application
         android:name=".APP"
         android:allowBackup="true"
@@ -17,10 +44,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCode">
         <activity
+            android:name="com.longwu.appcode.wallpaper.LiveWallpaperMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.MediaBrowserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".googlepay.GooglePayActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ArcViewActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
 
                 <!-- launcher -->
@@ -34,40 +75,32 @@
         </activity>
         <activity
             android:name=".launcher.LauncherActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".permission.PermissionActivity"
-            android:exported="true"></activity>
-
+            android:exported="true" />
         <activity
             android:name=".home.HomeWatchActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ui.SpeechToTextActivity"
-            android:exported="true"></activity>
-
+            android:exported="true" />
+        <activity
+            android:name=".ui.VulActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".ui.FlatBuffersMapActivity"
-            android:exported="true"></activity>
-
+            android:allowEmbedded="true"
+            android:exported="true" />
+        <activity
+            android:name=".location.LocationActivity"
+            android:exported="true" /> <!-- <activity -->
+        <!-- android:name=".ui.ShortCutActivity" -->
+        <!-- android:exported="true" /> -->
         <activity
             android:name=".acc.AccActivity"
-            android:exported="true"></activity>
-
-        <!-- label 这个就是在设置界面显示的label 应该比较好理解了-->
-        <service
-            android:name=".acc.MyAccessibilityService"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
-            <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
-            </intent-filter>
-            <meta-data
-                android:name="android.accessibilityservice"
-                android:resource="@xml/taskbackconfig" />
-        </service>
-
+            android:exported="true" /> <!-- label 这个就是在设置界面显示的label 应该比较好理解了 -->
         <receiver
             android:name=".appwidget.WidgetProvider"
             android:exported="false">
@@ -82,6 +115,70 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/desktop_widget" />
         </receiver>
+        <receiver
+            android:name=".appwidget.WidgetProvider2"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
+                <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/desktop_widget" />
+        </receiver>
+
+        <service
+            android:name=".acc.AppBackToDeskAccessibilityService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
+        <receiver
+            android:name=".receiver.MyBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_RESTARTED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
+
+        <service
+            android:name=".service.MyMusicService"
+            android:exported="true"
+            android:foregroundServiceType="mediaPlayback"
+            tools:ignore="Instantiatable">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".jobshdule.MyJobService"
+            android:exported="true"/>
+
+        <service android:name=".wallpaper.VideoWallpaperService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+            <meta-data android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper" />
+        </service>
+
     </application>
 
 </manifest>
