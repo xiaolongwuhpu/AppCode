@@ -21,6 +21,7 @@ import com.longwu.appcode.acc.AccActivity
 import com.longwu.appcode.home.HomeWatchActivity
 import com.longwu.appcode.jobshdule.MyJobService
 import com.longwu.appcode.launcher.LauncherActivity
+import com.longwu.appcode.launcher.LauncherActivity2
 import com.longwu.appcode.location.LocationActivity
 import com.longwu.appcode.permission.PermissionActivity
 import com.longwu.appcode.ui.ArcViewActivity
@@ -70,7 +71,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, LauncherActivity::class.java))
         }
         btn_permission.setOnClickListener {
-            startActivity(Intent(this, PermissionActivity::class.java))
+            startActivity(Intent(this, LauncherActivity2::class.java))
+//            startActivity(Intent(this, PermissionActivity::class.java))
         }
         btn_home_press.setOnClickListener {
             startActivity(Intent(this, HomeWatchActivity::class.java))

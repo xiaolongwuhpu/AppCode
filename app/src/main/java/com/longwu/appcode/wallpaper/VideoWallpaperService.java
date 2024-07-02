@@ -1,10 +1,14 @@
 package com.longwu.appcode.wallpaper;
 
+import static android.content.Intent.getIntent;
+
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.media.MediaPlayer;
 import android.net.Uri;
+
+import com.longwu.appcode.R;
 
 import java.io.IOException;
 
@@ -33,15 +37,13 @@ public class VideoWallpaperService extends WallpaperService {
         public void surfaceCreated(SurfaceHolder holder) {
             mediaPlayer = new MediaPlayer();
             try {
-                if (videoUri != null) {
-                    mediaPlayer.setDataSource(getApplicationContext(), videoUri);
-                    mediaPlayer.setSurface(holder.getSurface());
-                    mediaPlayer.setLooping(true);
-                    mediaPlayer.prepare();
-                } else {
-                    Log.e("VideoEngine", "Video URI is null");
-                }
-            } catch (IOException e) {
+                mediaPlayer.setDataSource(getApplicationContext(), videoUri);
+//                mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.video);
+                mediaPlayer.setSurface(holder.getSurface());
+                mediaPlayer.setLooping(true);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -70,13 +72,13 @@ public class VideoWallpaperService extends WallpaperService {
             }
         }
 
-        @Override
-        public void onDestroy() {
-            super.onDestroy();
-            if (mediaPlayer != null) {
-                mediaPlayer.release();
-                mediaPlayer = null;
-            }
-        }
+//        @Override
+//        public void onDestroy() {
+//            super.onDestroy();
+//            if (mediaPlayer != null) {
+//                mediaPlayer.release();
+//                mediaPlayer = null;
+//            }
+//        }
     }
 }

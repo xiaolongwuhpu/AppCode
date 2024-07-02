@@ -1,0 +1,6 @@
+table TestCategory {
+  package_name: string;
+  category_id: string;
+}
+
+root_type TestCategory;

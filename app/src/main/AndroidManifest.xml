@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="${applicationId}">
+    package="com.longwu.appcode">
+    <!--    package="${applicationId}">-->
 
-    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
+    <!--    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
-    <uses-permission android:name="android.permission.ACTIVITY_EMBEDDING" />
+    <!--    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />-->
+    <!--    <uses-permission android:name="android.permission.ACTIVITY_EMBEDDING" />-->
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
@@ -31,8 +32,8 @@
 
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.BIND_WALLPAPER" />
-<!--    android:sharedUserMaxSdkVersion="32"-->
-<!--    android:sharedUserId="android.uid.system"-->
+    <!--    android:sharedUserMaxSdkVersion="32"-->
+    <!--    android:sharedUserId="android.uid.system"-->
     <application
         android:name=".APP"
         android:allowBackup="true"
@@ -50,9 +51,6 @@
             android:name=".ui.MediaBrowserActivity"
             android:exported="false" />
         <activity
-            android:name=".googlepay.GooglePayActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.ArcViewActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
@@ -63,19 +61,27 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
-                <!-- launcher -->
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".launcher.LauncherActivity"
-            android:exported="true" />
+            android:exported="true"></activity>
+        <activity
+            android:name=".launcher.LauncherActivity2"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".permission.PermissionActivity"
             android:exported="true" />
@@ -168,14 +174,17 @@
         </service>
         <service
             android:name=".jobshdule.MyJobService"
-            android:exported="true"/>
+            android:exported="true" />
 
-        <service android:name=".wallpaper.VideoWallpaperService"
-            android:exported="true">
+        <service
+            android:name=".wallpaper.VideoWallpaperService"
+            android:exported="true"
+            android:permission="android.permission.BIND_WALLPAPER">
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
             </intent-filter>
-            <meta-data android:name="android.service.wallpaper"
+            <meta-data
+                android:name="android.service.wallpaper"
                 android:resource="@xml/wallpaper" />
         </service>
 
