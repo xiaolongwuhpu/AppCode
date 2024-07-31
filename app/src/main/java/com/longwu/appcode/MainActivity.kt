@@ -23,15 +23,12 @@ import com.longwu.appcode.jobshdule.MyJobService
 import com.longwu.appcode.launcher.LauncherActivity
 import com.longwu.appcode.launcher.LauncherActivity2
 import com.longwu.appcode.location.LocationActivity
-import com.longwu.appcode.permission.PermissionActivity
 import com.longwu.appcode.ui.ArcViewActivity
 import com.longwu.appcode.ui.FlatBuffersMapActivity
 import com.longwu.appcode.ui.MediaBrowserActivity
 import com.longwu.appcode.ui.SpeechToTextActivity
 import com.longwu.appcode.ui.VulActivity
 import com.longwu.appcode.util.ProcessUtil
-import com.longwu.appcode.util.ProcessUtil.getPackageUid
-import com.longwu.appcode.util.ProcessUtil.isProcessRunning
 import com.longwu.appcode.util.SystemInfo
 import com.longwu.appcode.util.ThreadUtils
 import com.longwu.appcode.wallpaper.LiveWallpaperMainActivity
