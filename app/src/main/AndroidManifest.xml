@@ -37,6 +37,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-feature android:name="android.hardware.sensor.gyroscope" android:required="false" />
     <application
         android:name=".APP"
         android:allowBackup="true"
@@ -192,6 +193,30 @@
             android:exported="true" />
         <service
             android:name=".wallpaper.VideoWallpaperService"
+            android:exported="true"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper" />
+        </service>
+        <service
+            android:name=".wallpaper.ImageWallpaperService"
+            android:exported="true"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper" />
+        </service>
+        <service
+            android:name=".wallpaper.ImageSensorWallpaperService"
             android:exported="true"
             android:permission="android.permission.BIND_WALLPAPER">
             <intent-filter>

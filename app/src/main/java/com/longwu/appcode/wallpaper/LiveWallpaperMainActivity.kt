@@ -28,14 +28,16 @@ import kotlinx.android.synthetic.main.activity_live_wallpaper_main.btn_set_live_
 import kotlinx.android.synthetic.main.activity_live_wallpaper_main.btn_set_phone_ringtone
 import kotlinx.android.synthetic.main.activity_live_wallpaper_main.btn_set_video
 import kotlinx.android.synthetic.main.activity_live_wallpaper_main.btn_set_wallpaper
+import kotlinx.android.synthetic.main.activity_live_wallpaper_main.btn_set_wallpaper_sensor
 import java.io.IOException
 
 
 class LiveWallpaperMainActivity : AppCompatActivity() {
     private val TAG = "LiveWallpaper"
     private val PICK_IMAGE = 1
-    private val PICK_VIDEO = 2
-    private val REQUEST_RINGTONE = 3
+    private val PICK_IMAGE_SENSOR = 2
+    private val PICK_VIDEO = 3
+    private val REQUEST_RINGTONE = 4
     private val PERMISSION_REQUEST_CODE = 100
     private val PERMISSION_REQUEST_CODE_SETTING = 101
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +51,9 @@ class LiveWallpaperMainActivity : AppCompatActivity() {
         checkAndRequestPermissions()
         btn_set_wallpaper.setOnClickListener {
             chooseImage(it)
+        }
+        btn_set_wallpaper_sensor.setOnClickListener {
+            chooseImage(it, PICK_IMAGE_SENSOR)
         }
 
         btn_set_video.setOnClickListener {
@@ -124,10 +129,10 @@ class LiveWallpaperMainActivity : AppCompatActivity() {
         }
     }
 
-    private fun chooseImage(view: View?) {
+    private fun chooseImage(view: View? ,code: Int = PICK_IMAGE) {
         val intent = Intent(Intent.ACTION_PICK)
         intent.setType("image/*")
-        startActivityForResult(intent, PICK_IMAGE)
+        startActivityForResult(intent, code)
     }
 
     private fun chooseVideo(view: View?) {
@@ -143,6 +148,9 @@ class LiveWallpaperMainActivity : AppCompatActivity() {
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
             val imageUri = data.data
             setWallpaperFromUri(imageUri)
+        } else if (requestCode == PICK_IMAGE_SENSOR && resultCode == RESULT_OK && data != null) {
+            val imageUri = data.data
+            setWallpaperSensorFromUri(imageUri)
         } else if (requestCode == PICK_VIDEO && resultCode == RESULT_OK && data != null) {
             val videoUri = data.data
             setVideoWallpaper(videoUri)
@@ -173,8 +181,28 @@ class LiveWallpaperMainActivity : AppCompatActivity() {
     private fun setWallpaperFromUri(imageUri: Uri?) {
         try {
             val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
-            val wallpaperManager = WallpaperManager.getInstance(this)
-            wallpaperManager.setBitmap(bitmap)
+            ImageWallpaperService.setBitmap(bitmap)
+            val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
+            intent.putExtra(
+                WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                ComponentName(this, ImageWallpaperService::class.java)
+            )
+            startActivity(intent)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun setWallpaperSensorFromUri(imageUri: Uri?) {
+        try {
+            val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
+            ImageSensorWallpaperService.setBitmap(bitmap)
+            val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
+            intent.putExtra(
+                WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                ComponentName(this, ImageSensorWallpaperService::class.java)
+            )
+            startActivity(intent)
         } catch (e: IOException) {
             e.printStackTrace()
         }

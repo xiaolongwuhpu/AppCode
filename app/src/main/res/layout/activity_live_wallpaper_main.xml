@@ -15,6 +15,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="选择图片"></Button>
+    <Button
+        android:id="@+id/btn_set_wallpaper_sensor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="三轴传感器图片"></Button>
 
     <Button
         android:id="@+id/btn_set_video"
