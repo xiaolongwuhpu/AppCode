@@ -1,18 +1,15 @@
 package com.longwu.appcode.wallpaper
 
 import android.Manifest
-import android.R.attr
 import android.annotation.SuppressLint
 import android.app.WallpaperManager
 import android.content.ComponentName
-import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log

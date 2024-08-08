@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -20,6 +21,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.TextureView;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import androidx.core.app.ActivityCompat;
@@ -40,17 +42,29 @@ public class Camera2WallpaperService extends WallpaperService {
         private CaptureRequest.Builder previewRequestBuilder;
         private Handler backgroundHandler;
         private HandlerThread backgroundThread;
-        private TextureView textureView;
+        private Surface previewSurface;
 
         @Override
         public void onCreate(SurfaceHolder surfaceHolder) {
             super.onCreate(surfaceHolder);
             startBackgroundThread();
-            textureView = new TextureView(getApplicationContext());
-            textureView.setSurfaceTextureListener(surfaceTextureListener);
-            FrameLayout frameLayout = new FrameLayout(getApplicationContext());
-            frameLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            frameLayout.addView(textureView);
+
+            surfaceHolder.addCallback(new SurfaceHolder.Callback() {
+                @Override
+                public void surfaceCreated(SurfaceHolder holder) {
+                    previewSurface = holder.getSurface();
+                    openCamera();
+                }
+
+                @Override
+                public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+                }
+
+                @Override
+                public void surfaceDestroyed(SurfaceHolder holder) {
+                    closeCamera();
+                }
+            });
         }
 
         @Override
@@ -58,6 +72,19 @@ public class Camera2WallpaperService extends WallpaperService {
             super.onDestroy();
             stopBackgroundThread();
             closeCamera();
+        }
+
+        @Override
+        public void onVisibilityChanged(boolean visible) {
+            if (visible) {
+                startBackgroundThread();
+                if (previewSurface != null) {
+                    openCamera();
+                }
+            } else {
+                closeCamera();
+                stopBackgroundThread();
+            }
         }
 
         private void startBackgroundThread() {
@@ -81,12 +108,6 @@ public class Camera2WallpaperService extends WallpaperService {
 
         @SuppressLint("MissingPermission")
         private void openCamera() {
-//            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-//                // Request camera permission
-//                ActivityCompat.requestPermissions((Activity) getApplicationContext(), new String[]{Manifest.permission.CAMERA}, 1);
-//                return;
-//            }
-
             CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
             try {
                 String cameraId = manager.getCameraIdList()[0];
@@ -107,24 +128,6 @@ public class Camera2WallpaperService extends WallpaperService {
             }
         }
 
-        private final TextureView.SurfaceTextureListener surfaceTextureListener = new TextureView.SurfaceTextureListener() {
-            @Override
-            public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
-                openCamera();
-            }
-
-            @Override
-            public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int width, int height) {}
-
-            @Override
-            public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-                return true;
-            }
-
-            @Override
-            public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {}
-        };
-
         private final CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
             @Override
             public void onOpened(CameraDevice camera) {
@@ -134,27 +137,27 @@ public class Camera2WallpaperService extends WallpaperService {
 
             @Override
             public void onDisconnected(CameraDevice camera) {
-                cameraDevice.close();
+                if (camera != null) {
+                    camera.close();
+                }
                 cameraDevice = null;
             }
 
             @Override
             public void onError(CameraDevice camera, int error) {
-                cameraDevice.close();
+                if (camera != null) {
+                    camera.close();
+                }
                 cameraDevice = null;
             }
         };
 
         private void startPreview() {
             try {
-                SurfaceTexture texture = textureView.getSurfaceTexture();
-                texture.setDefaultBufferSize(textureView.getWidth(), textureView.getHeight());
-                Surface surface = new Surface(texture);
-
                 previewRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
-                previewRequestBuilder.addTarget(surface);
+                previewRequestBuilder.addTarget(previewSurface);
 
-                cameraDevice.createCaptureSession(Arrays.asList(surface), new CameraCaptureSession.StateCallback() {
+                cameraDevice.createCaptureSession(Arrays.asList(previewSurface), new CameraCaptureSession.StateCallback() {
                     @Override
                     public void onConfigured(CameraCaptureSession session) {
                         if (cameraDevice == null) {
