@@ -18,6 +18,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.longwu.appcode.acc.AccActivity
+import com.longwu.appcode.camera.CameraActivity
 import com.longwu.appcode.home.HomeWatchActivity
 import com.longwu.appcode.jobshdule.MyJobService
 import com.longwu.appcode.launcher.LauncherActivity
@@ -43,6 +44,7 @@ import kotlinx.android.synthetic.main.activity_main.btn_widget
 import kotlinx.android.synthetic.main.activity_main.btn_window_mananger
 import kotlinx.android.synthetic.main.activity_main.liveWallpaper
 import kotlinx.android.synthetic.main.activity_main.location
+import kotlinx.android.synthetic.main.activity_main.open_camera
 import kotlinx.android.synthetic.main.activity_main.shortcut
 import java.util.Timer
 
@@ -97,6 +99,9 @@ class MainActivity : AppCompatActivity() {
 
         shortcut.setOnClickListener {
             startActivity(Intent(this, MediaBrowserActivity::class.java))
+        }
+        open_camera.setOnClickListener {
+            startActivity(Intent(this, CameraActivity::class.java))
         }
 
         btn_window_mananger.setOnClickListener {

@@ -1,33 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".wallpaper.LiveWallpaperMainActivity">
 
     <Button
         android:id="@+id/btn_set_wallpaper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="240dp"
-        android:text="选择图片"
-        app:layout_constraintBottom_toTopOf="@+id/btn_set_video"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"></Button>
+        android:text="选择图片"></Button>
 
     <Button
         android:id="@+id/btn_set_video"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="340dp"
-        android:text="选择视频"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"></Button>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:text="选择视频"></Button>
+
+    <Button
+        android:id="@+id/btn_set_live_wallpaper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择动态壁纸"></Button>
+
+    <Button
+        android:id="@+id/btn_set_live_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择camera"></Button>
+
+    <Button
+        android:id="@+id/btn_set_live_camera2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择camera2"></Button>
+
+    <Button
+        android:id="@+id/btn_set_live_cameraX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择cameraX"></Button>
+
+    <Button
+        android:id="@+id/btn_set_phone_ringtone"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@color/pay_button_generic_ripple_color_dark"
+        android:text="设置铃声"></Button>
+</LinearLayout>

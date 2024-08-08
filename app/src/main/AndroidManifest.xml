@@ -2,17 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.longwu.appcode">
-    <!--    package="${applicationId}">-->
-
-    <!--    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />-->
+    <!-- <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" /> -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-    <!--    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />-->
-    <!--    <uses-permission android:name="android.permission.ACTIVITY_EMBEDDING" />-->
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
@@ -29,26 +26,30 @@
         android:name="android.permission.SUPPRESS_CLIPBOARD_ACCESS_NOTIFICATION"
         android:protectionLevel="signature|role" />
     <uses-permission android:name="android.permission.BIND_JOB_SERVICE" />
-
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.BIND_WALLPAPER" />
-
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-    <!--    android:sharedUserMaxSdkVersion="32"-->
-    <!--    android:sharedUserId="android.uid.system"-->
+    <uses-feature android:name="android.software.live_wallpaper" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <application
         android:name=".APP"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCode">
         <activity
-            android:name="com.longwu.appcode.wallpaper.LiveWallpaperMainActivity"
+            android:name=".wallpaper.LiveWallpaperMainActivity"
             android:exported="false" />
         <activity
             android:name=".ui.MediaBrowserActivity"
@@ -67,13 +68,14 @@
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".launcher.LauncherActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".launcher.LauncherActivity2"
             android:exported="true">
@@ -84,7 +86,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".permission.PermissionActivity"
             android:exported="true" />
@@ -109,7 +110,18 @@
         <!-- android:exported="true" /> -->
         <activity
             android:name=".acc.AccActivity"
-            android:exported="true" /> <!-- label 这个就是在设置界面显示的label 应该比较好理解了 -->
+            android:exported="true" />
+
+        <activity
+            android:name=".camera.CameraActivity"
+            android:exported="true" />
+        <activity
+            android:name=".camera.CameraSurfaceActivity"
+            android:exported="true" />
+        <activity
+            android:name=".camera.CameraGLSurfaceActivity"
+            android:exported="true" />
+
         <receiver
             android:name=".appwidget.WidgetProvider"
             android:exported="false">
@@ -170,7 +182,7 @@
             android:name=".service.MyMusicService"
             android:exported="true"
             android:foregroundServiceType="mediaPlayback"
-            tools:ignore="Instantiatable">
+            tools:ignore="ForegroundServicePermission,Instantiatable">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>
@@ -178,9 +190,60 @@
         <service
             android:name=".jobshdule.MyJobService"
             android:exported="true" />
-
         <service
             android:name=".wallpaper.VideoWallpaperService"
+            android:exported="true"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper" />
+        </service>
+
+        <!-- 立方体形式一 -->
+        <service
+            android:name=".wallpaper.CubeWallpaper1"
+            android:exported="true"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper" />
+        </service>
+
+        <!-- camera -->
+        <service
+            android:name=".wallpaper.CameraWallpaperService"
+            android:exported="true"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper" />
+        </service>
+        <!-- camera2 -->
+        <service
+            android:name=".wallpaper.Camera2WallpaperService"
+            android:exported="true"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper" />
+        </service>
+
+        <!-- cameraX -->
+        <service
+            android:name=".wallpaper.CameraXWallpaperService"
             android:exported="true"
             android:permission="android.permission.BIND_WALLPAPER">
             <intent-filter>
