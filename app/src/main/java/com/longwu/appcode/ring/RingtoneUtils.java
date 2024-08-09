@@ -1,10 +1,13 @@
 package com.longwu.appcode.ring;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -117,33 +120,75 @@ public class RingtoneUtils {
         return RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE);
     }
 
-    public static Uri copyRingtoneToRingtonesFolder(Context context, Uri uri, String fileName) throws IOException {
+    public static Uri copyRingtoneToRingtonesFolder(Context context, Uri selectAudioUri, String fileName) throws IOException {
         Uri newUri = null;
-        try {
-            ContentResolver contentResolver = context.getContentResolver();
-            InputStream inputStream = contentResolver.openInputStream(uri);
+        File ringTones;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ringTones = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES).getPath());
+        } else {
+            ringTones = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES);
+        }
 
+        if (!ringTones.exists()) {
+            ringTones.mkdirs();
+        }
+
+        ContentResolver contentResolver = context.getContentResolver();
+        InputStream inputStream = contentResolver.openInputStream(selectAudioUri);
+
+        // 创建文件路径
+        File file = new File(ringTones, fileName);
+        if (file.exists()) {
+            // 如果文件已存在，则删除它
+            file.delete();
+        }
+
+        // 将内容写入文件
+        OutputStream outputStream = new FileOutputStream(file);
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = inputStream.read(buffer)) > 0) {
+            outputStream.write(buffer, 0, length);
+        }
+
+        inputStream.close();
+        outputStream.close();
+
+        // 检查是否已有相同路径的文件存在
+        Uri existingUri = null;
+        Cursor cursor = contentResolver.query(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.MediaColumns._ID},
+                MediaStore.MediaColumns.DATA + "=?",
+                new String[]{file.getAbsolutePath()},
+                null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            // 获取现有文件的 Uri
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID));
+            existingUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
+            cursor.close();
+        }
+
+        if (existingUri != null) {
+            // 如果文件已经存在，则使用现有的 Uri
+            newUri = existingUri;
+        } else {
+            // 否则插入新的记录
             ContentValues values = new ContentValues();
+            values.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
             values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
             values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mp3");
-            values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_NOTIFICATIONS);
             values.put(MediaStore.Audio.Media.IS_NOTIFICATION, true);
+            values.put(MediaStore.Audio.Media.IS_RINGTONE, true);
 
             newUri = contentResolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values);
+        }
 
-            if (newUri != null) {
-                OutputStream outputStream = contentResolver.openOutputStream(newUri);
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = inputStream.read(buffer)) > 0) {
-                    outputStream.write(buffer, 0, length);
-                }
-
-                inputStream.close();
-                outputStream.close();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (newUri != null) {
+            RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, newUri);
+            RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION, newUri);
         }
 
         return newUri;

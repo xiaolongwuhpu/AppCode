@@ -136,6 +136,7 @@ public class ProcessUtil {
 
     public static String TAG = "ProcessUtil";
 
+    //验证可用
     public static void stopProcess(String processName, Context context) {
         Log.d(TAG, "into stopProcess ==>>processName ==>>" + processName);
         PackageInfo pi = new PackageInfo();

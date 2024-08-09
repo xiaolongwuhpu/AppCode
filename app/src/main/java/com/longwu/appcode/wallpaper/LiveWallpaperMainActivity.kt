@@ -162,7 +162,7 @@ class LiveWallpaperMainActivity : AppCompatActivity() {
             var name = getFileNameFromUri(uri)
             try {
                 val newUri = RingtoneUtils.copyRingtoneToRingtonesFolder(this,uri,name)
-                setRingtone(newUri)
+//                setRingtone(newUri)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -288,6 +288,6 @@ class LiveWallpaperMainActivity : AppCompatActivity() {
 
     private fun setRingtone(uri: Uri) {
         RingtoneManager.setActualDefaultRingtoneUri(this, RingtoneManager.TYPE_RINGTONE, uri)
-        RingtoneManager.setActualDefaultRingtoneUri(this, RingtoneManager.TYPE_NOTIFICATION, uri)
+//        RingtoneManager.setActualDefaultRingtoneUri(this, RingtoneManager.TYPE_NOTIFICATION, uri)
     }
 }
